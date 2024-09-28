@@ -54,31 +54,31 @@ import (
  
 	c.JSON(http.StatusOK, gin.H{"status": 200, "message": "Delete successful"})
  }
- 
-  func UpdateLeaveRequest(c *gin.Context) {
-	leaveRequestID := c.Param("id")
-	var leaveRequest entity.LeaveRequest
 
-	db := config.DB()
-	result := db.First(&leaveRequest, leaveRequestID)
- 
-	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Leave not found"})
-		return
-	}
- 
-	if err := c.ShouldBindJSON(&leaveRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": 400, "message": "Bad request, unable to map payload"})
-		return
-	}
- 
-	result = db.Save(&leaveRequest)
- 
-	if result.Error != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": 400, "message": "Bad request"})
-		return
-	}
- 
-	c.JSON(http.StatusOK, gin.H{"status": 200, "message": "Update successful"})
- }
+ func UpdateLeaveStatus(c *gin.Context) {
+    rentId := c.Param("id")
+    var payload struct {
+        Status string `json:"status"`
+    }
 
+    if err := c.ShouldBindJSON(&payload); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    db := config.DB()
+    var leaveRequest entity.LeaveRequest
+
+    if err := db.First(&leaveRequest, rentId).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Leave not found"})
+        return
+    }
+
+    leaveRequest.Status = payload.Status
+    if err := db.Save(&leaveRequest).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"status": 200, "message": "Update successful"})
+}

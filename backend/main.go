@@ -62,8 +62,7 @@ func main() {
 		router.DELETE("/rent/:id", rent.Delete)
 
 		// Leave routes
-
-		router.PUT("/leave/:id", Leave.UpdateLeaveRequest)
+        router.PUT("/leave/:id/status", Leave.UpdateLeaveStatus)
 		router.GET("/leaves", Leave.GetAllLeaveRequests)
 		router.GET("/leave/:id", Leave.GetLeaveRequest)
 		router.DELETE("/leave/:id", Leave.DeleteLeaveRequest)
