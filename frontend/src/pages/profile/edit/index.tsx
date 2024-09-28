@@ -138,7 +138,7 @@ function EditProfile() {
       {contextHolder}
       <Card>
         <Title level={2} style={{ fontSize: "24px", color: "#003366", fontFamily: "Kanit, sans-serif" }}>
-          แก้ไขข้อมูลผู้ใช้งาน
+          แก้ไขข้อมูลผู้ใช้
         </Title>
         <Divider />
         <Row justify="center" style={{ marginBottom: '20px' }}>
